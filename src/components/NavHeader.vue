@@ -9,7 +9,7 @@
     </symbol>
     <div class="navbar">
       <div class="navbar-left-container">
-        <h1>Welcome</h1>
+        <h1 style="margin: 20px">Welcome</h1>
       </div>
       <div class="navbar-right-container" style="display: flex;">
         <div class="navbar-menu-container">
