@@ -9,8 +9,8 @@
           <div class="filter-nav">
             <span class="sortby">Sort by:</span>
             <a href="javascript:void(0)" class="default cur">Default</a>
-            <a href="javascript:void(0)" class="price">Price <svg class="icon icon-arrow-short"><use xlink:href="#icon-arrow-short"></use></svg></a>
-            <a href="javascript:void(0)" class="filterby stopPop" @click="showFilterPop">Filter by</a>
+            <a @click="sortGoods" href="javascript:void(0)" class="price">Price <svg class="icon icon-arrow-short"><use xlink:href="#icon-arrow-short"></use></svg></a>
+            <a class="filterby stopPop" @click="showFilterPop">Filter by</a>
           </div>
           <div class="accessory-result">
             <!-- filter -->
@@ -41,6 +41,9 @@
                     </div>
                   </li>
                 </ul>
+                <div v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
+                  onloading...
+                </div>
               </div>
             </div>
           </div>
@@ -64,6 +67,10 @@
     data(){
       return{
         goodsList:[],
+        sortFlag:true,
+        page:1,
+        pageSize:12,
+        busy:true,
         priceFilter:[
           {
             startPrice:'0.00',
@@ -93,11 +100,38 @@
         this.getGoodsList();
       },
       methods:{
-        getGoodsList(){
-          axios.get("/goods").then((goodsdata)=>{
+        getGoodsList(flag){
+          let param = {
+            page:this.page,
+            pageSize:this.pageSize,
+            sort:this.sortFlag?1:-1,
+            priceLevel:this.priceZone
+          }
+          axios.get("/goods",{
+            params:param
+          }).then((goodsdata)=>{
             var res = goodsdata.data;
-            this.goodsList = res.data.result;
+            if(res.status=="0"){
+              this.busy=false;
+              if(flag){
+                this.goodsList = this.goodsList.concat(res.result.list);
+                if(res.result.count == 0){
+                  this.busy = true;
+                }else{
+                  this.busy = false;
+                }
+              }else{
+                this.goodsList = res.result.list;
+              }
+            }else{
+              this.goodsList = [];
+            }
           })
+        },
+        sortGoods(){
+          this.sortFlag = !this.sortFlag;
+          this.page = 1;
+          this.getGoodsList();
         },
         showFilterPop(){
             this.filterBy=true;
@@ -109,7 +143,15 @@
         },
         setPriceZone(index){
           this.priceZone=index;
+          this.page = 1;
           this.closePop();
+        },
+        loadMore(){
+          this.busy=true;
+          setTimeout(() => {
+            this.page++;
+            this.getGoodsList(true);
+          }, 1000);
         }
       }
     }

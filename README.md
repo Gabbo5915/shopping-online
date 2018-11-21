@@ -8,6 +8,12 @@
 # install dependencies
 npm install
 
+# import database data
+follow the "result" of "mock/goods.json"
+
+# run server
+node server/bin/www
+
 # serve with hot reload at localhost:8080
 npm run dev
 
