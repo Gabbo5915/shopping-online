@@ -59,4 +59,52 @@ router.get('/', function(req, res, next) {
   })
 });
 
+router.post("/addCart",function (req,res,next) {
+  let userId = "10001";
+  let productId = req.body.productId;
+  let User = require('../model/user');
+
+  User.findOne({userId:userId},function (err,userDoc) {
+    if(err){
+      res.json({
+        status:"1",
+        msg:err.message
+      })
+    }else{
+      console.log("userDoc:"+userDoc);
+      if(userDoc){
+        Goods.findOne({productId:productId},function (err1,doc) {
+          if(err1){
+            res.json({
+              status:"1",
+              msg:err1.message
+            })
+          }else{
+            if(doc){
+              doc.productNum = 1;
+              doc.checked = 1;
+              userDoc.cartList.push(doc);
+              userDoc.save(function (err2,doc2) {
+                if(err2){
+                  res.json({
+                    status:"1",
+                    msg:err2.message
+                  })
+                }else{
+                  res.json({
+                    status:"0",
+                    msg:'',
+                    result:'success'
+                  })
+                }
+              })
+            }
+          }
+        })
+      }
+    }
+  })
+
+});
+
 module.exports = router;

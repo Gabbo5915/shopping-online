@@ -30,13 +30,13 @@
                 <ul>
                   <li v-for="item in goodsList">
                     <div class="pic">
-                      <a href="#"><img v-lazy="item.productImg" alt=""></a>
+                      <a href="#"><img v-lazy="'/static/'+item.productImg" alt=""></a>
                     </div>
                     <div class="main">
                       <div class="name">{{item.productName}}</div>
                       <div class="price">{{item.productPrice}}</div>
                       <div class="btn-area">
-                        <a href="javascript:;" class="btn btn--m">ADD TO CART</a>
+                        <a href="javascript:;" class="btn btn--m" @click="addCart(item.productId)">ADD TO CART</a>
                       </div>
                     </div>
                   </li>
@@ -106,7 +106,7 @@
             pageSize:this.pageSize,
             sort:this.sortFlag?1:-1,
             priceLevel:this.priceZone
-          }
+          };
           axios.get("/goods",{
             params:param
           }).then((goodsdata)=>{
@@ -143,8 +143,10 @@
         },
         setPriceZone(index){
           this.priceZone=index;
+          console.log("the price level is: "+this.priceZone);
           this.page = 1;
           this.closePop();
+          this.getGoodsList();
         },
         loadMore(){
           this.busy=true;
@@ -152,6 +154,17 @@
             this.page++;
             this.getGoodsList(true);
           }, 1000);
+        },
+        addCart(productId){
+          axios.post('/goods/addCart',{
+            productId:productId
+          }).then((res)=>{
+            if(res.status==0){
+              alert("add success")
+            }else{
+              alert("msg:"+res.msg);
+            }
+          })
         }
       }
     }

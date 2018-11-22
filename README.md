@@ -9,7 +9,7 @@
 npm install
 
 # import database data
-follow the "result" of "mock/goods.json"
+follow the "result" of "mock/goods.json" (for-test is to test the vue-infinite-scroll function)
 
 # run server
 node server/bin/www
