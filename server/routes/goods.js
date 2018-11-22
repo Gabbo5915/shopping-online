@@ -1,9 +1,9 @@
 var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
-var Goods = require('../model/goods');
+var Goods = require('../models/goods');
 
-mongoose.connect('mongodb://127.0.0.1:27017/shopping-online');
+mongoose.connect('mongodb://127.0.0.1:27017/shopping-online',{ useNewUrlParser: true });
 mongoose.connection.on("connected",function () {
   console.log("MongoDB connected success.")
 });
@@ -62,45 +62,76 @@ router.get('/', function(req, res, next) {
 router.post("/addCart",function (req,res,next) {
   let userId = "10001";
   let productId = req.body.productId;
-  let User = require('../model/user');
+  let Users = require('../models/users');
 
-  User.findOne({userId:userId},function (err,userDoc) {
+  Users.findOne({userId:userId},function (err,userDoc) {
     if(err){
       res.json({
-        status:"1",
+        status:"400",
         msg:err.message
       })
     }else{
-      console.log("userDoc:"+userDoc);
       if(userDoc){
-        Goods.findOne({productId:productId},function (err1,doc) {
-          if(err1){
-            res.json({
-              status:"1",
-              msg:err1.message
-            })
-          }else{
-            if(doc){
-              doc.productNum = 1;
-              doc.checked = 1;
-              userDoc.cartList.push(doc);
-              userDoc.save(function (err2,doc2) {
-                if(err2){
-                  res.json({
-                    status:"1",
-                    msg:err2.message
-                  })
-                }else{
-                  res.json({
-                    status:"0",
-                    msg:'',
-                    result:'success'
-                  })
-                }
+        let goodsitem='';
+        userDoc.cartList.forEach(function (item) {
+          if(item.productId==productId){
+            goodsitem=item;
+            item.productNum++;
+          }
+        });
+        if(goodsitem){
+          userDoc.save(function (err2,doc2) {
+            if(err2){
+              res.json({
+                status:"400",
+                msg:err2.message
+              })
+            }else{
+              res.json({
+                status:"200",
+                msg:'',
+                result:'success'
               })
             }
-          }
-        })
+          })
+        }else {
+          Goods.findOne({productId: productId}, function (err1, doc) {
+            if (err1) {
+              res.json({
+                status: "400",
+                msg: err1.message
+              })
+            } else {
+              if (doc) {
+                console.log(doc);
+                let newobj = {//新创建一个对象，实现转换mongoose不能直接增加属性的坑
+                  productNum: 1,
+                  checked: "1",
+                  productId: doc.productId,
+                  producName: doc.producName,
+                  productPrice: doc.productPrice,
+                  productName: doc.productName,
+                  productImg: doc.productImg,
+                }
+                userDoc.cartList.push(newobj);
+                userDoc.save(function (err2, doc2) {
+                  if (err2) {
+                    res.json({
+                      status: "400",
+                      msg: err2.message
+                    })
+                  } else {
+                    res.json({
+                      status: "200",
+                      msg: '',
+                      result: 'success'
+                    })
+                  }
+                })
+              }
+            }
+          })
+        }
       }
     }
   })

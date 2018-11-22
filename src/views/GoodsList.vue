@@ -17,7 +17,7 @@
             <div class="filter stopPop" id="filter" v-bind:class="{'filterby-show':filterBy}">
               <dl class="filter-price">
                 <dt>Price:</dt>
-                <dd><a href="javascript:void(0)" v-bind:class="{'cur':priceZone=='all'}" @click="priceZone='all'">All</a></dd>
+                <dd><a href="javascript:void(0)" v-bind:class="{'cur':priceZone=='all'}" @click="setPriceZone('all')">All</a></dd>
                 <dd v-for="(price,index) in priceFilter">
                   <a href="javascript:void(0)" v-bind:class="{'cur':priceZone==index}" @click="setPriceZone(index)" >{{price.startPrice}} - {{price.endPrice}}</a>
                 </dd>
@@ -30,7 +30,7 @@
                 <ul>
                   <li v-for="item in goodsList">
                     <div class="pic">
-                      <a href="#"><img v-lazy="'/static/'+item.productImg" alt=""></a>
+                      <a href="#"><img v-lazy="'/static/'+item.productImg":key="'/static/'+item.productImg" alt=""></a>
                     </div>
                     <div class="main">
                       <div class="name">{{item.productName}}</div>
@@ -159,7 +159,7 @@
           axios.post('/goods/addCart',{
             productId:productId
           }).then((res)=>{
-            if(res.status==0){
+            if(res.status===200){
               alert("add success")
             }else{
               alert("msg:"+res.msg);
