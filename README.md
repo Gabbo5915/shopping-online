@@ -9,7 +9,15 @@
 npm install
 
 # import database data
-follow the "result" of "mock/goods.json" (for-test is to test the vue-infinite-scroll function)
+add shopping-online db in mongoDB
+follow the "result" of "mock/goods.json" (for-test is to test the vue-infinite-scroll function) to add goods Collection
+follow the below syntax to add users Collection:
+"userId" : "10001",-----Can not change!
+"userNmae" : "gabbo1",-----customer by yourself
+"userPwd" : "1234",-----customer by yourself
+"orderList" : [],
+"cartList" : [],
+"addressList" : []
 
 # run server
 node server/bin/www

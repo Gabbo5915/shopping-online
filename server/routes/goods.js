@@ -83,12 +83,12 @@ router.post("/addCart",function (req,res,next) {
           userDoc.save(function (err2,doc2) {
             if(err2){
               res.json({
-                status:"400",
+                status:"1",
                 msg:err2.message
               })
             }else{
               res.json({
-                status:"200",
+                status:"0",
                 msg:'',
                 result:'success'
               })

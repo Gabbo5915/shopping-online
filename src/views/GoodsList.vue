@@ -143,7 +143,6 @@
         },
         setPriceZone(index){
           this.priceZone=index;
-          console.log("the price level is: "+this.priceZone);
           this.page = 1;
           this.closePop();
           this.getGoodsList();
