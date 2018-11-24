@@ -2,12 +2,12 @@
   <div>
     <nav-header></nav-header>
     <nav-bread>
-      <span>CheckOut</span>
+      <span>Review</span>
     </nav-bread>
     <svg style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
       <defs>
         <symbol id="icon-add" viewBox="0 0 32 32">
-          <title>add2</title>
+          <title>add</title>
           <path class="path1" d="M15 17h-13.664c-0.554 0-1.002-0.446-1.002-1 0-0.552 0.452-1 1.002-1h13.664v-13.664c0-0.554 0.446-1.002 1-1.002 0.552 0 1 0.452 1 1.002v13.664h13.664c0.554 0 1.002 0.446 1.002 1 0 0.552-0.452 1-1.002 1h-13.664v13.664c0 0.554-0.446 1.002-1 1.002-0.552 0-1-0.452-1-1.002v-13.664z"></path>
         </symbol>
         <symbol id="icon-ok" viewBox="0 0 39 32">
@@ -113,13 +113,12 @@
             </ul>
           </div>
         </div>
-
         <div class="order-foot-wrap">
           <div class="prev-btn-wrap">
             <a class="btn btn--m" @click="previous">Previous</a>
           </div>
           <div class="next-btn-wrap">
-            <button class="btn btn--m btn--red">Proceed to payment</button>
+            <router-link class="btn btn--m btn--red" to="/payment">Proceed to payment</router-link>
           </div>
         </div>
       </div>

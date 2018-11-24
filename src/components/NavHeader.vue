@@ -98,7 +98,6 @@
             }
             axios.post("users/login",params).then((response)=>{
               let res = response.data;
-              console.dir(res);
               if (res.status === "0") {
                 this.errorTip = false;
                 this.loginModalFlag = false;
