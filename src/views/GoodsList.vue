@@ -9,7 +9,7 @@
           <div class="filter-nav">
             <span class="sortby">Sort by:</span>
             <a href="javascript:void(0)" class="default cur">Default</a>
-            <a @click="sortGoods" href="javascript:void(0)" class="price">Price <svg class="icon icon-arrow-short"><use xlink:href="#icon-arrow-short"></use></svg></a>
+            <a @click="sortGoods" href="javascript:void(0)" class="price">Price</a>
             <a class="filterby stopPop" @click="showFilterPop">Filter by</a>
           </div>
           <div class="accessory-result">
@@ -41,6 +41,18 @@
                     </div>
                   </li>
                 </ul>
+                <modal v-bind:mdShow="mdShowCart" v-on:close="closeModal">
+                  <p slot="message">
+                    <svg class="icon-status-ok">
+                      <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-status-ok"></use>
+                    </svg>
+                    <span>ADD SUCCESS!</span>
+                  </p>
+                  <div slot="btnGroup">
+                    <a href="JavaScript:void(0);" @click="mdShowCart=false" class="btn btn--m">GO ON</a>
+                    <router-link to="/cart" class="btn btn--m btn--red">CART</router-link>
+                  </div>
+                </modal>
                 <div v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
                   onloading...
                 </div>
@@ -49,7 +61,7 @@
           </div>
         </div>
       </div>
-      <div class="md-overlay" v-show="overLayFalg" @click="closePop"></div>
+      <div class="md-overlay" v-show="overLayFlag" @click="closePop"></div>
       <nav-footer></nav-footer>
     </div>
 </template>
@@ -61,7 +73,8 @@
   import  '@/assets/css/login.css'
   import NavHeader from '@/components/NavHeader'
   import NavFooter from '@/components/NavFooter'
-  import NavBread from "@/components/NavBread";
+  import NavBread from "@/components/NavBread"
+  import Modal from '@/components/Modal'
   import axios from 'axios'
     export default {
     data(){
@@ -91,11 +104,13 @@
         ],
         priceZone:'all',
         filterBy:false,
-        overLayFalg:false
+        overLayFlag:false,
+        mdShow: false,
+        mdShowCart: false,
       }
     },
       name: "GoodsList",
-      components: {NavBread, NavFooter, NavHeader},
+      components: {NavBread, NavFooter, NavHeader,Modal},
       mounted:function(){
         this.getGoodsList();
       },
@@ -135,11 +150,11 @@
         },
         showFilterPop(){
             this.filterBy=true;
-            this.overLayFalg=true;
+            this.overLayFlag=true;
         },
         closePop(){
           this.filterBy=false;
-          this.overLayFalg=false;
+          this.overLayFlag=false;
         },
         setPriceZone(index){
           this.priceZone=index;
@@ -159,11 +174,15 @@
             productId:productId
           }).then((res)=>{
             if(res.status===200){
-              alert("add success")
+              this.mdShowCart = true;
             }else{
-              alert("msg:"+res.msg);
+              this.mdShow = true;
             }
           })
+        },
+        closeModal() {
+          this.mdShow = false;
+          this.mdShowCart = false;
         }
       }
     }

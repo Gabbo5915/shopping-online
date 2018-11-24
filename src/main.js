@@ -5,10 +5,12 @@ import App from './App'
 import router from './router'
 import VueLazyLoad from 'vue-lazyload'
 import infiniteScroll from 'vue-infinite-scroll'
+import Vuex from 'vuex'
 
 Vue.config.productionTip = false;
 
 Vue.use(infiniteScroll);
+Vue.use(Vuex);
 
 Vue.use(VueLazyLoad,{
   loading:"/static/loading-svg/loading-bars.svg"

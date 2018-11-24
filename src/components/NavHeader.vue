@@ -103,8 +103,7 @@
                 this.errorTip = false;
                 this.loginModalFlag = false;
                 this.nickName=res.result.userName;
-                console.log("name:"+res.result.userName);
-                // this.getCartCount();
+                //this.getCartCount();
               } else {
                 this.errorTip = true;
                 return;
